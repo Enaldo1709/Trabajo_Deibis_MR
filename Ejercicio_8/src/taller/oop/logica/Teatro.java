@@ -6,25 +6,29 @@ public class Teatro {
     private String nombre;
     private String direccion;
     private ArrayList<Funcion> funciones;
-    private int maxFunciones;
+    private int numeroFunciones;
 
     public Teatro(String nombre, String direccion) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.funciones = new ArrayList<Funcion>();
-        this.maxFunciones = 4;
+        this.numeroFunciones = 0;
     }
     
     public Object[] toArray(int contador, int index) {
         return new Object[] {
-            index, this.nombre, this.direccion, this.funciones.get(index).getNombre(),
+            contador, this.nombre, this.direccion, this.funciones.get(index).getNombre(),
             this.funciones.get(index).getPrecio()
         };
     }
             
-    public void addFuncion(Funcion funcion) throws ArrayIndexOutOfBoundsException{
-        if(this.funciones.size()<this.maxFunciones) this.funciones.add(funcion);
+    public Teatro addFuncion(Funcion funcion) throws ArrayIndexOutOfBoundsException{
+        if(this.numeroFunciones < 4) {
+            this.funciones.add(funcion);
+            this.numeroFunciones++;
+        }        
         else throw new ArrayIndexOutOfBoundsException();
+        return this;
     }
 
     public String getNombre() {
@@ -35,11 +39,11 @@ public class Teatro {
         this.nombre = nombre;
     }
 
-    public String getDirecciones() {
+    public String getDireccion() {
         return direccion;
     }
 
-    public void setDirecciones(String direccion) {
+    public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
@@ -49,16 +53,12 @@ public class Teatro {
 
     public void setFunciones(ArrayList<Funcion> funciones) {
         this.funciones = funciones;
+        this.numeroFunciones = this.funciones.size();
     }
 
-    public int getMaxFunciones() {
-        return maxFunciones;
+    public int getNumeroFunciones() {
+        return numeroFunciones;
     }
+    
 
-    public void setMaxFunciones(int maxFunciones) {
-        this.maxFunciones = maxFunciones;
-    }
-    
-    
-    
 }
