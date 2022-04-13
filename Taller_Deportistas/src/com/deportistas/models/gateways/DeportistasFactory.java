@@ -1,0 +1,29 @@
+package com.deportistas.models.gateways;
+
+import com.deportistas.lista.Nodo;
+import com.deportistas.lista.gateway.NodoFactory;
+import com.deportistas.models.Deportista;
+
+public class DeportistasFactory implements NodoFactory<Deportista> {
+    private static DeportistasFactory instance = null;
+    
+    private DeportistasFactory(){
+
+    }
+
+    public static DeportistasFactory getInstance(){
+        if(instance == null){
+            instance = new DeportistasFactory();
+        }
+        return instance;
+    }
+
+    @Override
+    public Deportista cast(Nodo nodo) {
+        Deportista deportista = new Deportista();
+        deportista.setIndex(nodo.index());
+        deportista.setNext(nodo.next());
+        return deportista;
+    }
+    
+}
