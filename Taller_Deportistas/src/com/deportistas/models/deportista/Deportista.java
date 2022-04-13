@@ -1,4 +1,4 @@
-package com.deportistas.models;
+package com.deportistas.models.deportista;
 
 import com.deportistas.lista.Nodo;
 

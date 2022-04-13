@@ -1,7 +1,7 @@
-package com.deportistas.models;
+package com.deportistas.models.deportista;
 
 import com.deportistas.lista.Lista;
-import com.deportistas.models.gateways.DeportistasFactory;
+import com.deportistas.models.deportista.gateways.DeportistasFactory;
 
 public class ListaDeportistas extends Lista<Deportista> {
 
@@ -21,7 +21,7 @@ public class ListaDeportistas extends Lista<Deportista> {
     
     private boolean exist(String id){
         if(id == null){
-            throw new IllegalArgumentException("Error idDeportista cannot be null.");
+            throw new IllegalArgumentException("Error idDeportista no puede ser nulo.");
         }
         if (this.head == null){
             return false;

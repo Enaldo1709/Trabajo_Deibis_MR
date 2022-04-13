@@ -1,8 +1,8 @@
-package com.deportistas.models.gateways;
+package com.deportistas.models.deportista.gateways;
 
 import com.deportistas.lista.Nodo;
 import com.deportistas.lista.gateway.NodoFactory;
-import com.deportistas.models.Deportista;
+import com.deportistas.models.deportista.Deportista;
 
 public class DeportistasFactory implements NodoFactory<Deportista> {
     private static DeportistasFactory instance = null;
