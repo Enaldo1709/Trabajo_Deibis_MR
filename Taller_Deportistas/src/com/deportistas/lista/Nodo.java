@@ -1,25 +1,34 @@
 package com.deportistas.lista;
 
-import com.deportistas.lista.gateway.NodoFactory;
-
-public class Nodo<T extends Nodo> {
+public class Nodo<T extends Nodo<T>> {
     private long index;
-    private Nodo next;
+    private Nodo<T> next;
+    private Nodo<T> prev;
     
     public Nodo(){
         this.next = null;
+        this.prev = null;
     }
     
-    public Nodo(T next){
+    public Nodo(Nodo<T> next, Nodo<T> prev){
+        this.next = next;
+        this.prev = prev;
+    }
+    
+    public void setNext(Nodo<T> next){
         this.next = next;
     }
     
-    public void setNext(Nodo next){
-        this.next = next;
-    }
-    
-    public Nodo next(){
+    public Nodo<T> next(){
         return this.next;
+    }
+
+    public void setPrev(Nodo<T> prev){
+        this.prev = prev;
+    }
+
+    public Nodo<T> prev(){
+        return this.prev;
     }
     
     public void setIndex(long index){

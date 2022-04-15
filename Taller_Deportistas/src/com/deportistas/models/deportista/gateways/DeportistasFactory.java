@@ -19,10 +19,11 @@ public class DeportistasFactory implements NodoFactory<Deportista> {
     }
 
     @Override
-    public Deportista cast(Nodo nodo) {
+    public Deportista cast(Nodo<Deportista> nodo) {
         Deportista deportista = new Deportista();
         deportista.setIndex(nodo.index());
         deportista.setNext(nodo.next());
+        deportista.setPrev(nodo.prev());
         return deportista;
     }
     

@@ -1,19 +1,20 @@
 package com.deportistas.models.deportista;
 
 import com.deportistas.lista.Nodo;
+import com.deportistas.models.disciplinas.Disciplina;
 
 
 public class Deportista extends Nodo<Deportista> {
     private String id;
     private String nombre;
-    private String disciplina;
+    private Disciplina disciplina;
     private int experiencia;
 
     public Deportista(){
         super();
     }
 
-    public Deportista(String id, String nombre, String disciplina, int experiencia) {
+    public Deportista(String id, String nombre, Disciplina disciplina, int experiencia) {
         super();
         this.id = id;
         this.nombre = nombre;
@@ -37,11 +38,11 @@ public class Deportista extends Nodo<Deportista> {
         this.nombre = nombre;
     }
 
-    public String getDisciplina() {
+    public Disciplina getDisciplina() {
         return disciplina;
     }
 
-    public void setDisciplina(String disciplina) {
+    public void setDisciplina(Disciplina disciplina) {
         this.disciplina = disciplina;
     }
 

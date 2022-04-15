@@ -2,8 +2,8 @@ package com.deportistas.lista;
 
 import com.deportistas.lista.gateway.NodoFactory;
 
-public class Lista<T extends Nodo>{
-    protected T head;
+public class Lista<T extends Nodo<T>>{
+    protected Nodo<T> head;
     private NodoFactory<T> factory;
     
     public Lista(NodoFactory<T> factory){
@@ -11,88 +11,78 @@ public class Lista<T extends Nodo>{
         this.factory = factory;
     }
     
-    public T getHead(){
+    public Nodo<T> getHead(){
         return head;
     }
     
-    public T last(){
+    public Nodo<T> last(){
         if (head == null){
             return null;
         }
-        T last = head;
-        do{
-            last = factory.cast(last.next());
-        }while(!last.next().equals(head));
-        return last;
+        return head.prev();
     }
     
-    public void setHead(T head){
+    public void setHead(Nodo<T> head){
         head.setIndex(0);
         if (this.head == null) {
             this.head = head;
             this.head.setNext(this.head);
+            this.head.setPrev(this.head);
         } else {
-            Nodo last = this.last();
             updateIndexes(1);
+            Nodo<T> last = this.last();
+            head.setPrev(last);
             head.setNext(this.head);
+            this.head.setPrev(head);
             last.setNext(head);
             this.head = head;
         }
     }
     
-    public void add(T nodo){
+    public void add(Nodo<T> nodo){
         if (this.head == null){
             this.setHead(nodo);
             return;
         }
-        T last = this.last();
+        Nodo<T> last = this.last();
         nodo.setIndex(last.index()+1);
         last.setNext(nodo);
         nodo.setNext(this.head);
+        nodo.setPrev(last);
     }
     
     public long size(){
-        long size = 0;
-        if (this.head != null){
-            Nodo aux = this.head;
-            do{
-                size++;
-                aux=aux.next();
-            }while(!(aux.equals(this.head)));
-        }
-        return size;
+        return last().index()+1;
     }
     
-    public T get(long index) throws IllegalArgumentException{
+    public Nodo<T> get(long index) throws IllegalArgumentException, IndexOutOfBoundsException{
         if(index < 0){
-            throw new IllegalArgumentException("Error obtaining node, index must can't be less than 0.");
+            throw new IllegalArgumentException("Error obtaining node, index can't be less than 0.");
         }
-            
-        T nodo = null;
-        T aux = this.head;
+        if(index > last().index()){
+            throw new IndexOutOfBoundsException("Index is out of list bounds.");
+        }
+        Nodo<T> nodo = null;
+        Nodo<T> aux = this.head;
         do{
             if(aux.index() == index){
                 nodo = aux;
                 break;
             }
-            aux = factory.cast(aux.next());
+            aux = aux.next();
         }while(!aux.next().equals(this.head));
         return nodo;
     }
     
-    public void delete(long index) throws IndexOutOfBoundsException{
-        Nodo nodo = this.get(index);
-        if(nodo == null){
-            throw new IndexOutOfBoundsException(String.format("Cannot delete node %d: Node not exist in list.", index));
-        }
-        
+    public void delete(long index) {
+        Nodo<T> nodo = this.get(index);
+                
         if(this.head.equals(nodo)){
             setHead(factory.cast(this.head.next()));
         } else {
-            T prev = (index == 0)?this.last():this.get(index-1);
+            Nodo<T> prev = (index == 0)?this.last():this.get(index-1);
             prev.setNext(nodo.next());
             updateIndexes();
-            nodo = null;
         }
     }
     
@@ -101,14 +91,16 @@ public class Lista<T extends Nodo>{
             this.setHead(nodo);
             return;
         }
-        Nodo old = this.get(index);
-        Nodo prev = this.get(index - 1);
-        nodo.setNext(old);
+        Nodo<T> old = this.get(index);
+        Nodo<T> prev = this.get(index - 1);
+        nodo.setPrev(factory.cast(prev));
+        nodo.setNext(factory.cast(old));
+        old.setPrev(nodo);
         prev.setNext(nodo);
         updateIndexes();
     }
     
-    protected T cast(Nodo nodo){
+    protected T cast(Nodo<T> nodo){
         return this.factory.cast(nodo);
     }
     
@@ -120,7 +112,7 @@ public class Lista<T extends Nodo>{
         if (this.head == null){
             return;
         }
-        Nodo aux = this.head;
+        Nodo<T> aux = this.head;
         long cont = offset;
         do {            
             aux.setIndex(cont);

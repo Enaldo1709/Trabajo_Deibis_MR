@@ -13,6 +13,9 @@ public class ListaDeportistas extends Lista<Deportista> {
 
     @Override
     public void add(Deportista deportista){
+        if (deportista == null){
+            throw new NullPointerException("Error el deportista no puede ser nulo");
+        }
         if(exist(deportista.getId())){
             throw new IllegalArgumentException("Error el deportista ya existe");
         }
@@ -21,7 +24,7 @@ public class ListaDeportistas extends Lista<Deportista> {
     
     private boolean exist(String id){
         if(id == null){
-            throw new IllegalArgumentException("Error idDeportista no puede ser nulo.");
+            throw new NullPointerException("Error idDeportista no puede ser nulo.");
         }
         if (this.head == null){
             return false;
@@ -36,6 +39,4 @@ public class ListaDeportistas extends Lista<Deportista> {
         return false;
     }
     
-    
-
 }
