@@ -4,7 +4,7 @@ import com.deportistas.lista.gateway.NodoFactory;
 
 public class Lista<T extends Nodo<T>>{
     protected Nodo<T> head;
-    private NodoFactory<T> factory;
+    protected NodoFactory<T> factory;
     
     public Lista(NodoFactory<T> factory){
         this.head = null;
@@ -78,7 +78,11 @@ public class Lista<T extends Nodo<T>>{
         Nodo<T> nodo = this.get(index);
                 
         if(this.head.equals(nodo)){
-            setHead(factory.cast(this.head.next()));
+            if (this.head.equals(this.head.next())){
+                this.head = null;
+            } else {
+                setHead(this.head.next());
+            }
         } else {
             Nodo<T> prev = (index == 0)?this.last():this.get(index-1);
             prev.setNext(nodo.next());
@@ -87,6 +91,9 @@ public class Lista<T extends Nodo<T>>{
     }
     
     public void set(long index, T nodo){
+        if(index < 0 || index > this.size()){
+            throw new IndexOutOfBoundsException("Error index provided is invalid.");
+        }
         if (index == 0){
             this.setHead(nodo);
             return;
@@ -102,6 +109,25 @@ public class Lista<T extends Nodo<T>>{
     
     protected T cast(Nodo<T> nodo){
         return this.factory.cast(nodo);
+    }
+
+    protected void updateHead(){
+        this.head = get(0);
+    }
+
+    protected void swap(long i1, long i2){
+        Nodo<T> n1 = get(i1);
+        Nodo<T> n2 = get(i2);
+        Nodo<T> aux = cast(n1);
+
+        n1.prev().setNext(n2);
+        n2.prev().setNext(n1);
+        n1.setPrev(n2.prev());
+        n2.setPrev(aux.prev());
+        n1.setNext(n2.next());
+        n2.setNext(aux.next());
+        n1.setIndex(n2.index());
+        n2.setIndex(aux.index());
     }
     
     private void updateIndexes(){

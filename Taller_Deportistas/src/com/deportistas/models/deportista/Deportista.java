@@ -53,4 +53,8 @@ public class Deportista extends Nodo<Deportista> {
     public void setExperiencia(int experiencia) {
         this.experiencia = experiencia;
     }
+
+    public boolean compareTo(Deportista deportista){
+        return (this.nombre.compareToIgnoreCase(deportista.getNombre()) > 0);   
+    }
 }
