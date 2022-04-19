@@ -10,9 +10,6 @@ public class ListaDeportistas extends Lista<Deportista> {
         super(DeportistasFactory.getInstance());
     }
 
-    
-
-    @Override
     public void add(Nodo<Deportista> deportista){
         if (deportista == null){
             throw new NullPointerException("Error el deportista no puede ser nulo");

@@ -20,6 +20,17 @@ public class ListaDisciplina extends Lista<Disciplina> {
         super.add(disciplina);
     }
 
+    public void add(String disciplina){
+        if (disciplina == null){
+            throw new NullPointerException("Error la disciplina no puede ser nula");
+        }
+        Disciplina disciplina2 = new Disciplina(disciplina);
+        if(exist(disciplina)){
+            throw new IllegalArgumentException("Error la disciplina ya existe");
+        }
+        super.add(disciplina2);
+    }
+
     public boolean exist(String name){
         if(name == null){
             throw new NullPointerException("Error nombre de la disciplina no puede ser nulo.");

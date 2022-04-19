@@ -4,6 +4,7 @@ import com.deportistas.lista.gateway.NodoFactory;
 
 public class Lista<T extends Nodo<T>>{
     protected Nodo<T> head;
+    protected Nodo<T> last;
     protected NodoFactory<T> factory;
     
     public Lista(NodoFactory<T> factory){
@@ -19,7 +20,7 @@ public class Lista<T extends Nodo<T>>{
         if (head == null){
             return null;
         }
-        return head.prev();
+        return this.last;
     }
     
     public void setHead(Nodo<T> head){
@@ -28,13 +29,13 @@ public class Lista<T extends Nodo<T>>{
             this.head = head;
             this.head.setNext(this.head);
             this.head.setPrev(this.head);
+            this.last = this.head;
         } else {
             updateIndexes(1);
-            Nodo<T> last = this.last();
-            head.setPrev(last);
+            head.setPrev(this.last);
             head.setNext(this.head);
             this.head.setPrev(head);
-            last.setNext(head);
+            this.last.setNext(head);
             this.head = head;
         }
     }
@@ -44,11 +45,11 @@ public class Lista<T extends Nodo<T>>{
             this.setHead(nodo);
             return;
         }
-        Nodo<T> last = this.last();
-        nodo.setIndex(last.index()+1);
-        last.setNext(nodo);
+        nodo.setIndex(this.last.index()+1);
+        this.last.setNext(nodo);
         nodo.setNext(this.head);
-        nodo.setPrev(last);
+        nodo.setPrev(this.last);
+        this.last = nodo;
     }
     
     public long size(){
@@ -59,18 +60,29 @@ public class Lista<T extends Nodo<T>>{
         if(index < 0){
             throw new IllegalArgumentException("Error obtaining node, index can't be less than 0.");
         }
-        if(index > last().index()){
+        if(index > this.last.index()){
             throw new IndexOutOfBoundsException("Index is out of list bounds.");
         }
         Nodo<T> nodo = null;
         Nodo<T> aux = this.head;
-        do{
-            if(aux.index() == index){
-                nodo = aux;
-                break;
-            }
-            aux = aux.next();
-        }while(!aux.next().equals(this.head));
+
+        if(Math.abs(this.head.index() - index) < Math.abs(this.last.index() - index)){
+            do{
+                if(aux.index() == index){
+                    nodo = aux;
+                    break;
+                }
+                aux = aux.next();
+            }while(!aux.next().equals(this.head));
+        } else {
+            do{
+                if(aux.index() == index){
+                    nodo = aux;
+                    break;
+                }
+                aux = aux.prev();
+            }while(!aux.prev().equals(this.head));
+        }
         return nodo;
     }
     
@@ -104,7 +116,7 @@ public class Lista<T extends Nodo<T>>{
         nodo.setNext(factory.cast(old));
         old.setPrev(nodo);
         prev.setNext(nodo);
-        updateIndexes();
+        updateIndexes(); 
     }
     
     protected T cast(Nodo<T> nodo){

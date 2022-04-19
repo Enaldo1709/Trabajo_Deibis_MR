@@ -20,11 +20,21 @@ public class DisciplinaFactory implements NodoFactory<Disciplina> {
 
     @Override
     public Disciplina cast(Nodo<Disciplina> nodo) {
+        if (nodo == null){
+            return null;
+        }
+        if (nodo instanceof Disciplina){
+            return (Disciplina) nodo;
+        }
         Disciplina disciplina = new Disciplina();
         disciplina.setIndex(nodo.index());
-        disciplina.setNext(nodo.next());
-        disciplina.setPrev(nodo.prev());     
-        return null;
+        if(nodo.next() != null){
+            disciplina.setNext(nodo.next());
+        }
+        if (nodo.prev() != null){
+            disciplina.setPrev(nodo.prev());     
+        }
+        return disciplina;
     }
     
 }
